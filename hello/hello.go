@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"strings"
         "os"
-	"golang.org/x/example/stringutil"
 )
 
 func main() {
