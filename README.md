@@ -2,18 +2,9 @@
 
 [![Go Reference](https://pkg.go.dev/badge/golang.org/x/example.svg)](https://pkg.go.dev/golang.org/x/example)
 
-This repository contains a collection of Go programs and libraries that
-demonstrate the language, standard libraries, and tools.
+This repository is a fork of the basic Golang example repo, trimmed down to contain a single example.
 
-## Clone the project
-
-```
-$ git clone https://go.googlesource.com/example
-$ cd example
-```
-https://go.googlesource.com/example is the canonical Git repository.
-It is mirrored at https://github.com/golang/example.
-## [hello](hello/) and [stringutil](stringutil/)
+## Build the project
 
 ```
 $ cd hello
@@ -25,4 +16,5 @@ A simple application that takes a command line argument, and then returns it to 
 ```
 $ ./hello/hello John Doe
 ```
+
 The above will return 'Hello, John Doe!'
