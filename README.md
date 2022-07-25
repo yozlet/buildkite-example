@@ -14,6 +14,7 @@ $ go build
 A simple application that takes a command line argument, and then returns it to you in a string:
 
 ```
+$ chmod +x hello/hello
 $ ./hello/hello John Doe
 ```
 
