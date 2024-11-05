@@ -1,6 +1,14 @@
 steps:
-  - command: "go build -o build/hello ./hello"
-    artifact_paths: "./build/hello"
+  - commands:
+      - "cd hello"
+      - "go build"
+    artifact_paths: "hello/hello"
     plugins:
       - docker#v5.11.0:
           image: "golang:1.18.0"
+  - block: "Enter test name argument"
+    prompt: ":name-badge: and who's asking?"
+    fields:
+      - text: "Name argument to 'hello' command"
+        key: "test-name-arg"
+  - command: "./test.sh"
