@@ -1,14 +1,19 @@
 steps:
-  - commands:
+  - label: "Build step"
+    commands:
       - "cd hello"
       - "go build"
     artifact_paths: "hello/hello"
     plugins:
       - docker#v5.11.0:
           image: "golang:1.18.0"
-  - block: "Enter test name argument"
-    prompt: ":name-badge: and who's asking?"
+  - label: "Name entry step"
+    block: ":name-badge: Enter name"
+    prompt: "... and who's asking?"
     fields:
       - text: "Name argument to 'hello' command"
         key: "test-name-arg"
-  - command: "./test.sh"
+        default: "Luther Blissett"
+        hint: "Used for testing the command output."
+  - label: "Test step"
+    command: "./test.sh"
