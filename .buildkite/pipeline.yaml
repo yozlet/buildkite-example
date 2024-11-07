@@ -1,17 +1,24 @@
 steps:
   - label: ":golang: Test step"
     key: "gotest"
-    command: "go run gotest.tools/gotestsum@latest --junitfile junit.xml ./..."
+    commands:
+      # FUTURE: include gotestsum in custom container image
+      - "go run gotest.tools/gotestsum@latest --junitfile junit.xml ./..."
     plugins:
+      # Run tests in Golang docker container
       - docker#v5.11.0:
           image: "golang:1.18.0"
-      # The test collector relies on BUILDKITE_ANALYSIS_TOKEN being
-      # set by the buildkite agent environment hook.
-      # See https://buildkite.com/docs/pipelines/security/secrets/managing#without-a-secrets-storage-service-exporting-secrets-with-environment-hooks
+      # Annotate build log with pretty test results
+      - junit-annotate#v2.5.0:
+          artifacts: "junit.xml"
+      # Uploads test run output (JUnit XML format) to Buildkite Test Engine
       - test-collector#v1.10.2:
+          # See .buildkite/hooks/post-command for analytics token fetching
           files: "junit.xml"
           format: "junit"
   - label: ":golang: Build step"
+    key: "gobuild"
+    depends_on: "gotest"
     commands:
       - "cd hello"
       - "go build"
@@ -20,6 +27,8 @@ steps:
       - docker#v5.11.0:
           image: "golang:1.18.0"
   - label: ":name-badge: Name entry step"
+    key: "name-entry"
+    depends_on: "gobuild"
     block: "Enter name"
     prompt: "... and who's asking?"
     fields:
@@ -28,4 +37,6 @@ steps:
         default: "Luther Blissett"
         hint: "Used for testing the command output."
   - label: ":shipit: Binary test step"
+    key: "binary-test"
+    depends_on: "name-entry"
     command: "./test.sh"
