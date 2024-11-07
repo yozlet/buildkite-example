@@ -33,6 +33,7 @@ steps:
   - label: ":name-badge: Name entry step"
     key: "name-entry"
     depends_on: "gobuild"
+    blocked_state: "running"
     block: "Enter name"
     prompt: "... and who's asking?"
     fields:
@@ -40,7 +41,7 @@ steps:
         key: "test-name-arg"
         default: "Luther Blissett"
         hint: "Used for testing the command output."
-  - label: ":shipit: Binary test step"
+  - label: ":package: Binary test step"
     key: "binary-test"
     depends_on: "name-entry"
     command: "./test.sh"
