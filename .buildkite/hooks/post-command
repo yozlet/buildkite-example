@@ -7,6 +7,6 @@ set -euo pipefail
 # https://buildkite.com/docs/pipelines/security/secrets/buildkite-secrets
 
 # This only runs for the go test runner step
-if [[ "$BUILDKITE_PIPELINE_SLUG" == "buildkite-example" && "$BUILDKITE_STEP_KEY" == "gotest" ]]; then
+if [[ "$BUILDKITE_STEP_KEY" == "gotest" ]]; then
     export BUILDKITE_ANALYTICS_TOKEN=$(buildkite-agent secret get analytics_token)
 fi
