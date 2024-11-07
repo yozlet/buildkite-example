@@ -1,5 +1,17 @@
 steps:
-  - label: "Build step"
+  - label: ":golang: Test step"
+    key: "gotest"
+    command: "go run gotest.tools/gotestsum@latest --junitfile junit.xml ./..."
+    plugins:
+      - docker#v5.11.0:
+          image: "golang:1.18.0"
+      # The test collector relies on BUILDKITE_ANALYSIS_TOKEN being
+      # set by the buildkite agent environment hook.
+      # See https://buildkite.com/docs/pipelines/security/secrets/managing#without-a-secrets-storage-service-exporting-secrets-with-environment-hooks
+      - test-collector#v1.10.2:
+          files: "junit.xml"
+          format: "junit"
+  - label: ":golang: Build step"
     commands:
       - "cd hello"
       - "go build"
@@ -7,13 +19,13 @@ steps:
     plugins:
       - docker#v5.11.0:
           image: "golang:1.18.0"
-  - label: "Name entry step"
-    block: ":name-badge: Enter name"
+  - label: ":name-badge: Name entry step"
+    block: "Enter name"
     prompt: "... and who's asking?"
     fields:
       - text: "Name argument to 'hello' command"
         key: "test-name-arg"
         default: "Luther Blissett"
         hint: "Used for testing the command output."
-  - label: "Test step"
+  - label: ":shipit: Binary test step"
     command: "./test.sh"

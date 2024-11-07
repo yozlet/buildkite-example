@@ -18,13 +18,18 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
-        "os"
 )
 
+func FmtHelloName(name string) string {
+	message := fmt.Sprintf("Hello, %v!", name)
+	return message
+}
+
 func main() {
-	
-	name := strings.Join(os.Args[1:]," ")
-	response := "Hello, " + name + "!"
+
+	name := strings.Join(os.Args[1:], " ")
+	response := FmtHelloName(name)
 	fmt.Println(response)
 }
