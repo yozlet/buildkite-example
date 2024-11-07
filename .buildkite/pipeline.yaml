@@ -4,18 +4,23 @@ steps:
     commands:
       # FUTURE: include gotestsum in custom container image
       - "go run gotest.tools/gotestsum@latest --junitfile junit.xml ./..."
+    artifact_paths: "junit.xml"
     plugins:
       # Run tests in Golang docker container
       - docker#v5.11.0:
           image: "golang:1.18.0"
-      # Annotate build log with pretty test results
-      - junit-annotate#v2.5.0:
-          artifacts: "junit.xml"
       # Uploads test run output (JUnit XML format) to Buildkite Test Engine
       - test-collector#v1.10.2:
           # See .buildkite/hooks/post-command for analytics token fetching
           files: "junit.xml"
           format: "junit"
+  - label: "Test results"
+    key: "gotest-results"
+    depends_on: "gotest"
+    plugins:
+      # Annotate build log with pretty test results
+      - junit-annotate#v2.5.0:
+          artifacts: "junit.xml"
   - label: ":golang: Build step"
     key: "gobuild"
     depends_on: "gotest"
